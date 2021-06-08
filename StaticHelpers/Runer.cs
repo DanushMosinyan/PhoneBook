@@ -7,20 +7,23 @@ namespace PhoneBook.StaticHelpers
 {
     class Runer
     {
-
-        public static void PhoneBook(string path)
+        public static void GetPhoneBookFromFile(string path)
         {
+            bool isNumberValid;
+            List<string> numberErrors = new List<string>();
+            List<string> separatorErrors = new List<string>();
             Console.WriteLine("PhoneBook Program:");
-            string allText = FileHelpers.Reader(path);
+            string allText = FileHelpers.TextFromFileReader(path);
             Console.WriteLine(allText);
-            List<Person> persons = Person.TextToPersonInfo(allText);
-            foreach (var person in persons.Select((value, index) => new { value, index }))
+            List<Person> persons = Person.TextToPersonInfo(allText, separatorErrors);
+            for (int index = 0; index < persons.Count; index++)
             {
-                if (!person.value.Number.Validator())
-                    Console.WriteLine(StringHelpers.invalidNumberMessage + $" {person.index + 1}");
+                isNumberValid = true;
+                if (!persons[index].Number.Validator())
+                    isNumberValid = false;
+                numberErrors.Add(isNumberValid ? null : StringHelpers.invalidNumberMessage);
             }
-            string[] Rows = allText.TextToRowSpliter();
-
+            ShowHelpers.ShowErrors( numberErrors, separatorErrors );
             Console.ReadLine();
         }
     }

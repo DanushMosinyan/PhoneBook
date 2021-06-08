@@ -5,26 +5,32 @@ namespace PhoneBook
 {
     public class Person
     {
-        public static List<Person> TextToPersonInfo(string text)
+        private const int rowCountWithSurname = 4;
+        private const int rowCountWithoutSurname = 3;
+        public static List<Person> TextToPersonInfo(string text, List<string> separatorErrors)
         {
+            bool isValidSeporator;
             List<Person> people = new List<Person>();
             string[] rows = text.TextToRowSpliter();
-
-            foreach (string row in rows)
+            for (int i = 0; i < rows.Length; i++)
             {
-                string[] substring = row.RowToWordSpliter();
-                if (substring.Length == 4)
+                isValidSeporator = true;
+                string[] substring = rows[i].RowToWordSpliter();
+                if (substring.Length == rowCountWithSurname)
                 {
                     people.Add(new Person(name: substring[0], number: substring[3], surname: substring[1]));
-                    if (!substring[2].SeporatorValidator())
-                        System.Console.WriteLine(StringHelpers.invalidSeparatorMessage + $" {people.Count}");
+                    if (!substring[2].SeparatorValidator())
+                        isValidSeporator = false;
+                    separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
                 }
-                if (substring.Length == 3)
+                if (substring.Length == rowCountWithoutSurname)
                 {
                     people.Add(new Person(name: substring[0], number: substring[2]));
-                    if (!substring[1].SeporatorValidator())
-                        System.Console.WriteLine(StringHelpers.invalidSeparatorMessage + $" {people.Count}");
+                    if (!substring[1].SeparatorValidator())
+                        isValidSeporator = false;
+                    separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
                 }
+                
             }
             return people;
         }

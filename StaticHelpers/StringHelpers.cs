@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 
 namespace PhoneBook.StaticHelpers
 {
     public static class StringHelpers
     {
-
-        /*"N"---------- number
-          "C"---------- char
-          "(''||'')"--- Or              In dev
-         */
-
+        private static int formatLenght = 9;
         public static bool Validator(this string str)
         {
             string myString = str;
-            int formatLenght = 9;
             bool flag = true;
             int i = 0;
             int j = 0;
@@ -26,40 +21,6 @@ namespace PhoneBook.StaticHelpers
                     flag = Int32.TryParse(myString[j].ToString(), out _);
                     i++;
                     j++;
-                    #region Over Engineering
-                    ////case '2':
-                    ////    if (format[i + 1].ToString() == @"\")
-                    ////    {
-                    ////        flag = format[i] == myString[j];
-                    ////    }
-                    ////    i += 2;
-                    ////    j++;
-                    ////    break;
-                    ////case '(':
-                    ////    {
-                    ////        int count = 0;
-                    ////        for (int c = 0; c < format.Length - i; c++)
-                    ////        {
-                    ////            if (format[c] == '2')
-                    ////            {
-                    ////                count++;
-                    ////            }
-                    ////            if (format[c] == '|' || format[c] == ')')
-                    ////            {
-                    ////                string strModule = myString.Substring(j, c);
-                    ////                string formatModule = format.Substring(i, c);
-                    ////                i = i + c + count + format[c] == ')' ? 0 : 1;
-                    ////                j = j + c - 1;
-                    ////                flag = strModule.Validator(formatModule);
-                    ////            }
-
-                    ////            if (flag == true|| format[c] == ')')
-                    ////                break;
-                    ////        }
-
-                    ////        break;
-                    ////    }
-                    #endregion
                 }
                 if (myString.Length - j != 0)
                 {
@@ -72,17 +33,12 @@ namespace PhoneBook.StaticHelpers
             }
             return flag;
         }
-        private static string[] validSeporators = new string[] { "-", ":", "--" };
-        public const string invalidSeparatorMessage = "Invalid seporator in line";
-        public const string invalidNumberMessage = "Invalid number in line";
-        public static bool SeporatorValidator(this string seporator)
+        private static string[] validSeparators = new string[] { "-", ":" };
+        public const string invalidSeparatorMessage = "separator should be : or -";
+        public const string invalidNumberMessage = "phone number should be with 9 digits";
+        public static bool SeparatorValidator(this string seporator)
         {
-            foreach (var validSeporator in validSeporators)
-            {
-                if (validSeporator == seporator)
-                    return true;
-            }
-            return false;
+            return validSeparators.Contains(seporator);
         }
         public static string[] TextToRowSpliter(this string str)
         {

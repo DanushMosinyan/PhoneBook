@@ -14,7 +14,7 @@ namespace PhoneBook
         {
             Console.ReadLine();
             path = @"..\\..\\..\\Samples\\FirstPhoneBook.txt";
-            Runer.PhoneBook(path);
+            Runer.GetPhoneBookFromFile(path);
         }
 
        

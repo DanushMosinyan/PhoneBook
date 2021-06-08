@@ -7,18 +7,17 @@ namespace PhoneBook.StaticHelpers
 {
     public static class FileHelpers
     {
-        public static string Reader(string path)
+        public static string TextFromFileReader(string path)
         {
-            string file = "";
             try
             {
-                file = File.ReadAllText(path);
+                return File.ReadAllText(path);
             }
             catch (Exception Ex)
             {
                 Console.WriteLine(Ex.Message);
             }
-            return file;
+            return null;
         }
     }
 }
