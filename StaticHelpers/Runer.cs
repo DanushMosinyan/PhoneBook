@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PhoneBook.StaticHelpers
 {
-    class Runer
+    class PhoneBookProcesser
     {
         public static void GetPhoneBookFromFile(string path)
         {
