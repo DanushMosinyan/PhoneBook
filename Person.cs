@@ -19,14 +19,14 @@ namespace PhoneBook
                 if (substring.Length == rowCountWithSurname)
                 {
                     people.Add(new Person(name: substring[0], number: substring[3], surname: substring[1]));
-                    if (!substring[2].SeparatorValidator())
+                    if (!StringHelpers.SeparatorValidator(substring[2]))
                         isValidSeporator = false;
                     separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
                 }
                 if (substring.Length == rowCountWithoutSurname)
                 {
                     people.Add(new Person(name: substring[0], number: substring[2]));
-                    if (!substring[1].SeparatorValidator())
+                    if (!StringHelpers.SeparatorValidator(substring[1]))
                         isValidSeporator = false;
                     separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
                 }

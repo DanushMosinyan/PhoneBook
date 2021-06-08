@@ -7,22 +7,19 @@ namespace PhoneBook.StaticHelpers
 {
     public static class StringHelpers
     {
-        private static int formatLenght = 9;
+        private const int formatLenght = 9;
         public static bool Validator(this string str)
         {
-            string myString = str;
-            bool flag = true;
-            int i = 0;
-            int j = 0;
+            bool isValid = true;
+            int lastIndex = 0;
             try
             {
-                while (flag && formatLenght > i)
+                while (isValid && formatLenght > lastIndex)
                 {
-                    flag = Int32.TryParse(myString[j].ToString(), out _);
-                    i++;
-                    j++;
+                    isValid = int.TryParse(str[lastIndex].ToString(), out _);
+                    lastIndex++;
                 }
-                if (myString.Length - j != 0)
+                if (str.Length - lastIndex != 0)
                 {
                     return false;
                 }
@@ -31,12 +28,14 @@ namespace PhoneBook.StaticHelpers
             {
                 return false;
             }
-            return flag;
+            return isValid;
         }
+
         private static string[] validSeparators = new string[] { "-", ":" };
         public const string invalidSeparatorMessage = "separator should be : or -";
         public const string invalidNumberMessage = "phone number should be with 9 digits";
-        public static bool SeparatorValidator(this string seporator)
+
+        public static bool SeparatorValidator(string seporator)
         {
             return validSeparators.Contains(seporator);
         }
