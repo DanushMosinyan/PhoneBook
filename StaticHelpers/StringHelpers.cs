@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection.Metadata;
 
 namespace PhoneBook.StaticHelpers
@@ -89,6 +90,26 @@ namespace PhoneBook.StaticHelpers
                 return false;
             }
             return flag;
+        }
+        private static string[] validSeporators = new string[] { "-", ":", "--" };
+        public const string invalidSeparatorMessage = "Invalid seporator in line";
+        public const string invalidNumberMessage = "Invalid number in line";
+        public static bool SeporatorValidator(this string seporator)
+        {
+            foreach (var validSeporator in validSeporators)
+            {
+                if (validSeporator == seporator)
+                    return true;
+            }
+            return false;
+        }
+        public static string[] TextToRowSpliter(this string str)
+        {
+            return str.Split('\r', '\n');
+        }
+        public static string[] RowToWordSpliter(this string str)
+        {
+            return str.Split(' ');
         }
     }
 }
