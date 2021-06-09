@@ -8,36 +8,35 @@ namespace PhoneBook
 {
     public class PhoneBook
     {
-        private const int MembersCount = 4;
-        private const int MembersCountWithoutSurname = 3;
-        private readonly string TextFromFile;
+        private readonly string textFromFile;
 
         private Dictionary<int, string> errors = new Dictionary<int, string>();
-        private List<Person> phoneBook;
+        private List<Person> contacts;
 
         public PhoneBook(string path)
         {
-            TextFromFile = FileHelpers.TextReader(path);
-            if (TextFromFile == null)
+            textFromFile = FileHelpers.TextReader(path);
+            if (textFromFile == null)
             {
                 Console.WriteLine("There is no text");
             }
-            GetPhoneBookFromText();
-            FindPhoneNumberValidationErrors();
+            contacts = GetPhoneBookFromText(textFromFile);
+            errors = GetSeporatorErrors(this.errors);
+            errors = FindPhoneNumberValidationErrors(this.errors);
         }
 
-        private void GetPhoneBookFromText()
+        private List<Person> GetPhoneBookFromText(string Text)
         {
-            phoneBook = this.TextToPersonList();
+            return TextToPersonList(Text);
         }
 
-        private void FindPhoneNumberValidationErrors()
+        private Dictionary<int, string> FindPhoneNumberValidationErrors(Dictionary<int, string> errors)
         {
-            for (int i = 0; i < phoneBook.Count; i++)
+            for (int i = 0; i < contacts.Count; i++)
             {
-                if (!phoneBook[i].Number.IsValidPhoneNumber())
+                if (!contacts[i].Number.IsValidPhoneNumber())
                 {
-                    if(errors.ContainsKey(i))
+                    if (errors.ContainsKey(i))
                     {
                         errors[i] = StringHelpers.ErrorsCombiner(Constants.InvalidNumberMessage, errors[i]);
                     }
@@ -47,12 +46,13 @@ namespace PhoneBook
                     }
                 }
             }
+            return errors;
         }
 
         public void ShowPhoneBook()
         {
             Console.WriteLine("PhoneBook Program:");
-            Console.WriteLine(TextFromFile);
+            Console.WriteLine(textFromFile);
         }
 
         public void ShowErrors()
@@ -60,22 +60,41 @@ namespace PhoneBook
             string errorMessage;
             foreach (var error in errors.OrderBy(obj => obj.Key))
             {
-                if (!string.IsNullOrEmpty(error.Value))
-                {
-                    errorMessage = $"line {error.Key + 1}: {error.Value}";
-                    Console.WriteLine(errorMessage);
-                }
+                errorMessage = $"line {error.Key + 1}: {error.Value}";
+                Console.WriteLine(errorMessage);
             }
         }
 
-        private List<Person> TextToPersonList()
+        private Dictionary<int, string> GetSeporatorErrors(Dictionary<int, string> errors)
+        {
+            string separator;
+            List<string> rows = textFromFile.TextToRowSpliter();
+            for (int i = 0; i < rows.Count; i++)
+            {
+                string[] substring = rows[i].RowToWordSpliter();
+                if (substring.Length == Constants.RowMembersCount)
+                {
+                    separator = substring[2];
+                    if (!StringHelpers.IsValidSeparator(separator))
+                        errors[i] = Constants.InvalidSeparatorMessage;
+                }
+                else if (substring.Length == Constants.RowMembersCountWithoutSurname)
+                {
+                    separator = substring[1];
+                    if (!StringHelpers.IsValidSeparator(separator))
+                        errors[i] = Constants.InvalidSeparatorMessage;
+                }
+            }
+            return errors;
+        }
+
+        private List<Person> TextToPersonList(string Text)
         {
             string name;
             string surname;
-            string separator;
             string number;
             List<Person> people = new List<Person>();
-            List<string> rows = TextFromFile.TextToRowSpliter();
+            List<string> rows = Text.TextToRowSpliter();
             for (int i = 0; i < rows.Count; i++)
             {
                 string[] substring = rows[i].RowToWordSpliter();
@@ -83,18 +102,16 @@ namespace PhoneBook
                 {
                     continue;
                 }
-                if (substring.Length == MembersCount)
+                if (substring.Length == Constants.RowMembersCount)
                 {
                     name = substring[0];
                     surname = substring[1];
-                    separator = substring[2];
                     number = substring[3];
                 }
-                else if (substring.Length == MembersCountWithoutSurname)
+                else if (substring.Length == Constants.RowMembersCountWithoutSurname)
                 {
                     name = substring[0];
                     surname = null;
-                    separator = substring[1];
                     number = substring[2];
                 }
                 else
@@ -103,9 +120,6 @@ namespace PhoneBook
                     continue;
                 }
                 people.Add(new Person(name, number, surname));
-                if (!StringHelpers.IsValidSeparator(separator))
-                    errors[i] = Constants.InvalidSeparatorMessage;
-
             }
             return people;
         }

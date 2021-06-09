@@ -14,22 +14,21 @@ namespace PhoneBook.StaticHelpers
                 if (c < '0' || c > '9')
                     return false;
             }
-
             return true;
         }
 
         public static bool IsValidPhoneNumber(this string str)
         {
             bool isValid;
-            isValid = IsDigitsOnly(str) && str.Length == 9;
+            isValid = IsDigitsOnly(str) && str.Length == Constants.PhoneNumberFormatLength;
             return isValid;
         }
-
 
         public static bool IsValidSeparator(string seporator)
         {
             return Constants.ValidSeparators.Contains(seporator);
         }
+
         public static List<string> TextToRowSpliter(this string str)
         {
             List<string> rows = new List<string>();
@@ -46,14 +45,16 @@ namespace PhoneBook.StaticHelpers
             }
             return rows;
         }
+
         public static string[] RowToWordSpliter(this string str)
         {
             return str.Split(' ');
         }
+
         public static string ErrorsCombiner(string first, string second)
         {
             string combined;
-            if (string.IsNullOrEmpty(first) && string.IsNullOrEmpty(second))
+            if (string.IsNullOrEmpty(first + second))
             {
                 combined = null;
             }
