@@ -7,26 +7,21 @@ namespace PhoneBook.StaticHelpers
 {
     public static class StringHelpers
     {
+        public static bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+
+            return true;
+        }
+
         public static bool IsValidPhoneNumber(this string str)
         {
-            bool isValid = true;
-            int lastIndex = 0;
-            try
-            {
-                while (isValid && Constants.PhoneNumberFormatLenght > lastIndex)
-                {
-                    isValid = int.TryParse(str[lastIndex].ToString(), out _);
-                    lastIndex++;
-                }
-                if (str.Length - lastIndex != 0)
-                {
-                    return false;
-                }
-            }
-            catch (IndexOutOfRangeException)
-            {
-                return false;
-            }
+            bool isValid;
+            isValid = IsDigitsOnly(str) && str.Length == 9;
             return isValid;
         }
 
@@ -38,7 +33,7 @@ namespace PhoneBook.StaticHelpers
         public static List<string> TextToRowSpliter(this string str)
         {
             List<string> rows = new List<string>();
-            foreach(var row in str.Split('\n', '\r'))
+            foreach (var row in str.Split('\n', '\r'))
             {
                 if (row.Length == 0 && row == "")
                 {
