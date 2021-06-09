@@ -7,7 +7,7 @@ namespace PhoneBook.StaticHelpers
 {
     public static class FileHelpers
     {
-        public static string TextFromFileReader(string path)
+        public static string TextReader(string path)
         {
             try
             {

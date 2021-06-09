@@ -7,16 +7,12 @@ using System.Text;
 
 namespace PhoneBook
 {
-    static class Program
+    class Program
     {
-        public static string path;
         static void Main(string[] args)
         {
             Console.ReadLine();
-            path = @"..\\..\\..\\Samples\\FirstPhoneBook.txt";
-            PhoneBookProcesser.GetPhoneBookFromFile(path);
+            PhoneBookProcessor.GetPhoneBookFromFile(@"..\\..\\..\\Samples\\FirstPhoneBook.txt");
         }
-
-       
     }
 }

@@ -5,32 +5,46 @@ namespace PhoneBook
 {
     public class Person
     {
-        private const int rowCountWithSurname = 4;
-        private const int rowCountWithoutSurname = 3;
-        public static List<Person> TextToPersonInfo(string text, List<string> separatorErrors)
+        private const int membersCount = 4;
+        private const int membersCountWithoutSurname = 3;
+        public static List<Person> TextToPersonInfo(string text, Dictionary<int, string> errors)
         {
-            bool isValidSeporator;
+            string name;
+            string surname;
+            string separator;
+            string number;
             List<Person> people = new List<Person>();
             string[] rows = text.TextToRowSpliter();
             for (int i = 0; i < rows.Length; i++)
             {
-                isValidSeporator = true;
                 string[] substring = rows[i].RowToWordSpliter();
-                if (substring.Length == rowCountWithSurname)
+                if (substring.Length == 1 && substring[0] == "")
                 {
-                    people.Add(new Person(name: substring[0], number: substring[3], surname: substring[1]));
-                    if (!StringHelpers.SeparatorValidator(substring[2]))
-                        isValidSeporator = false;
-                    separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
+                    continue;
                 }
-                if (substring.Length == rowCountWithoutSurname)
+                if (substring.Length == membersCount)
                 {
-                    people.Add(new Person(name: substring[0], number: substring[2]));
-                    if (!StringHelpers.SeparatorValidator(substring[1]))
-                        isValidSeporator = false;
-                    separatorErrors.Add(isValidSeporator ? null : StringHelpers.invalidSeparatorMessage);
+                    name = substring[0];
+                    surname = substring[1];
+                    separator = substring[2];
+                    number = substring[3];
                 }
-                
+                else if (substring.Length == membersCountWithoutSurname)
+                {
+                    name = substring[0];
+                    surname = null;
+                    separator = substring[1];
+                    number = substring[2];
+                }
+                else
+                {
+                    System.Console.WriteLine($"Wrong format in line {(i + 1) / 2}");
+                    continue;
+                }
+                people.Add(new Person(name: name, number: number, surname: surname));
+                if (!StringHelpers.SeparatorValidator(separator))
+                    errors[((i + 1) / 2)] = StringHelpers.invalidSeparatorMessage;
+
             }
             return people;
         }

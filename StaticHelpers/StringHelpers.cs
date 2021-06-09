@@ -41,11 +41,32 @@ namespace PhoneBook.StaticHelpers
         }
         public static string[] TextToRowSpliter(this string str)
         {
-            return str.Split('\r', '\n');
+            return str.Split('\n', '\r');
         }
         public static string[] RowToWordSpliter(this string str)
         {
             return str.Split(' ');
+        }
+        public static string ErrorsCombiner(string first, string second)
+        {
+            string combined;
+            if (string.IsNullOrEmpty(first) && string.IsNullOrEmpty(second))
+            {
+                combined = null;
+            }
+            else if (!string.IsNullOrEmpty(first))
+            {
+                combined = StringHelpers.invalidNumberMessage;
+                if (!string.IsNullOrEmpty(second))
+                {
+                    combined = combined + ", " + StringHelpers.invalidSeparatorMessage;
+                }
+            }
+            else
+            {
+                combined = StringHelpers.invalidSeparatorMessage;
+            }
+            return combined;
         }
     }
 }

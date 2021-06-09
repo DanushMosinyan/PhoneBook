@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PhoneBook.StaticHelpers
 {
     public static class ShowHelpers
     {
-        public static void ShowErrors(List<string> numberErrors, List<string> separatorErrors)
+        public static void ShowErrors(Dictionary<int, string> errors)
         {
             string errorMessage;
-            for (int i = 0; i < numberErrors.Count; i++)
+            foreach (var error in errors.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value))
             {
-                if (!(!(string.IsNullOrEmpty(numberErrors[i])) || !(string.IsNullOrEmpty(separatorErrors[i]))))
+                if (!string.IsNullOrEmpty(error.Value))
                 {
-                    continue;
+                    errorMessage = $"line {error.Key + 1}: " + error.Value;
+                    Console.WriteLine(errorMessage);
                 }
-                errorMessage = $"Line {i + 1} ";
-                if (!string.IsNullOrEmpty(numberErrors[i]))
-                {
-                    errorMessage = errorMessage + StringHelpers.invalidNumberMessage;
-                    if (!string.IsNullOrEmpty(separatorErrors[i]))
-                    {
-                        errorMessage = errorMessage + " , " + StringHelpers.invalidSeparatorMessage;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(separatorErrors[i]))
-                {
-                    errorMessage = errorMessage + StringHelpers.invalidSeparatorMessage;
-                }
-                Console.WriteLine(errorMessage);
             }
         }
+
     }
 }
