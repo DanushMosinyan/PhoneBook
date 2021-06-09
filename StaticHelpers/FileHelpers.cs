@@ -13,10 +13,15 @@ namespace PhoneBook.StaticHelpers
             {
                 return File.ReadAllText(path);
             }
-            catch (Exception Ex)
+            catch (FileNotFoundException ex)
             {
-                Console.WriteLine(Ex.Message);
+                Console.WriteLine(ex.Message);
             }
+            catch(FileLoadException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
             return null;
         }
     }

@@ -12,7 +12,9 @@ namespace PhoneBook
         static void Main(string[] args)
         {
             Console.ReadLine();
-            PhoneBookProcessor.GetPhoneBookFromFile(@"..\\..\\..\\Samples\\FirstPhoneBook.txt");
+            PhoneBook phoneBook = new PhoneBook(@"..\\..\\..\\Samples\\FirstPhoneBook.txt");
+            phoneBook.ShowPhoneBook();
+            phoneBook.ShowErrors();
         }
     }
 }

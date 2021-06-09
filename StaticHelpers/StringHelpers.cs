@@ -7,14 +7,13 @@ namespace PhoneBook.StaticHelpers
 {
     public static class StringHelpers
     {
-        private const int formatLenght = 9;
-        public static bool Validator(this string str)
+        public static bool IsValidPhoneNumber(this string str)
         {
             bool isValid = true;
             int lastIndex = 0;
             try
             {
-                while (isValid && formatLenght > lastIndex)
+                while (isValid && Constants.PhoneNumberFormatLenght > lastIndex)
                 {
                     isValid = int.TryParse(str[lastIndex].ToString(), out _);
                     lastIndex++;
@@ -31,17 +30,26 @@ namespace PhoneBook.StaticHelpers
             return isValid;
         }
 
-        private static string[] validSeparators = new string[] { "-", ":" };
-        public const string invalidSeparatorMessage = "separator should be : or -";
-        public const string invalidNumberMessage = "phone number should be with 9 digits";
 
-        public static bool SeparatorValidator(string seporator)
+        public static bool IsValidSeparator(string seporator)
         {
-            return validSeparators.Contains(seporator);
+            return Constants.ValidSeparators.Contains(seporator);
         }
-        public static string[] TextToRowSpliter(this string str)
+        public static List<string> TextToRowSpliter(this string str)
         {
-            return str.Split('\n', '\r');
+            List<string> rows = new List<string>();
+            foreach(var row in str.Split('\n', '\r'))
+            {
+                if (row.Length == 0 && row == "")
+                {
+                    continue;
+                }
+                else
+                {
+                    rows.Add(row);
+                }
+            }
+            return rows;
         }
         public static string[] RowToWordSpliter(this string str)
         {
@@ -56,15 +64,15 @@ namespace PhoneBook.StaticHelpers
             }
             else if (!string.IsNullOrEmpty(first))
             {
-                combined = StringHelpers.invalidNumberMessage;
+                combined = Constants.InvalidNumberMessage;
                 if (!string.IsNullOrEmpty(second))
                 {
-                    combined = combined + ", " + StringHelpers.invalidSeparatorMessage;
+                    combined = combined + ", " + Constants.InvalidSeparatorMessage;
                 }
             }
             else
             {
-                combined = StringHelpers.invalidSeparatorMessage;
+                combined = Constants.InvalidSeparatorMessage;
             }
             return combined;
         }
